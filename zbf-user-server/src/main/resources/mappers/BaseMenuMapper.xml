@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zbf.user.mapper.BaseMenuMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.zbf.common.entity.my.BaseMenu">
+        <id column="id" property="id" />
+        <result column="version" property="version" />
+        <result column="code" property="code" />
+        <result column="menuName" property="menuName" />
+        <result column="imagePath" property="imagePath" />
+        <result column="url" property="url" />
+        <result column="parentCode" property="parentCode" />
+        <result column="leval" property="leval" />
+        <result column="createTime" property="createTime" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, version, code, menuName, imagePath, url, parentCode, leval, createTime
+    </sql>
+
+    <resultMap id="mapVo" type="com.zbf.common.entity.my.BaseMenu">
+        <id column="id" property="id" />
+        <result column="version" property="version" />
+        <result column="code" property="code" />
+        <result column="menuName" property="menuName" />
+        <result column="imagePath" property="imagePath" />
+        <result column="url" property="url" />
+        <result column="parentCode" property="parentCode" />
+        <result column="leval" property="leval" />
+        <result column="createTime" property="createTime" />
+        <collection property="list" ofType="com.zbf.common.entity.my.BaseMenu" select="findByPid" column="id">
+        </collection>
+    </resultMap>
+
+    <select id="findByPid" resultMap="mapVo">
+        select * from base_menu where leval=#{pid};
+    </select>
+
+    <resultMap id="mapVos" type="com.zbf.common.entity.my.BaseMenu">
+        <id column="id" property="id" />
+        <result column="version" property="version" />
+        <result column="code" property="code" />
+        <result column="menuName" property="menuName" />
+        <result column="imagePath" property="imagePath" />
+        <result column="url" property="url" />
+        <result column="parentCode" property="parentCode" />
+        <result column="leval" property="leval" />
+        <result column="createTime" property="createTime" />
+        <collection property="list" ofType="com.zbf.common.entity.my.BaseMenu">
+            <id column="id2" property="id" />
+            <result column="version2" property="version" />
+            <result column="code2" property="code" />
+            <result column="menuName2" property="menuName" />
+            <result column="imagePath2" property="imagePath" />
+            <result column="url2" property="url" />
+            <result column="parentCode2" property="parentCode" />
+            <result column="leval2" property="leval" />
+            <result column="createTime2" property="createTime" />
+            <collection property="list" ofType="com.zbf.common.entity.my.BaseMenu">
+                <id column="id3" property="id" />
+                <result column="version3" property="version" />
+                <result column="code3" property="code" />
+                <result column="menuName3" property="menuName" />
+                <result column="imagePath3" property="imagePath" />
+                <result column="url3" property="url" />
+                <result column="parentCode3" property="parentCode" />
+                <result column="leval3" property="leval" />
+                <result column="createTime3" property="createTime" />
+            </collection>
+        </collection>
+    </resultMap>
+
+
+    <select id="findByloginName" resultMap="mapVos">
+SELECT
+	m.*,DISTINCT
+	m2.id id2,
+	m2.version version2,
+	m2.code code2,
+	m2.menuName menuName2,
+	m2.imagePath imagePath2,
+	m2.url url2,
+	m2.parentCode parentCode2,
+	m2.leval leval2,
+	m2.createTime createTime2,
+	m3.id id3,
+	m3.version version3,
+	m3.code code3,
+	m3.menuName menuName3,
+	m3.imagePath imagePath3,
+	m3.url url3,
+	m3.parentCode parentCode3,
+	m3.leval leval3,
+	m3.createTime createTime3
+FROM
+	base_menu m
+	LEFT JOIN base_menu m2 ON m2.parentCode = m.`code`
+	LEFT JOIN base_menu m3 ON m3.parentCode = m2.`code`
+WHERE
+	m.parentCode =0
+AND ( m2.id IN(
+
+SELECT
+	bmr.menu_id
+FROM
+	base_user bu
+	LEFT JOIN base_user_role bur ON bu.id = bur.userId
+	left JOIN base_role_menu bmr ON bur.roleId=bmr.role_id
+
+WHERE
+	bu.id =#{value}
+)
+OR m3.id IN(
+	SELECT
+	bmr.menu_id
+FROM
+	base_user bu
+	LEFT JOIN base_user_role bur ON bu.id = bur.userId
+	left JOIN base_role_menu bmr ON bur.roleId=bmr.role_id
+
+WHERE
+	bu.id =#{value}
+))
+
+    </select>
+
+</mapper>
