@@ -20,14 +20,22 @@ import java.util.List;
 @Service
 public class BaseMenuServiceImpl extends ServiceImpl<BaseMenuMapper, BaseMenu> implements IBaseMenuService {
 
+
     @Override
-    public List<BaseMenu> findByPid(Integer pid) {
-        return baseMapper.findByPid(pid);
+    public List<BaseMenu> listadmin() {
+        return baseMapper.listadmin();
     }
 
     @Override
-    public List<BaseMenu> findByloginName(String loginName) {
-        return baseMapper.findByloginName(loginName);
+    public List<BaseMenu> listByName(String loginName) {
+        return baseMapper.listByName(loginName);
+    }
+
+
+
+    @Override
+    public List<BaseMenu> getbycodes(Long code) {
+        return baseMapper.getbycodes(code);
     }
 
 }

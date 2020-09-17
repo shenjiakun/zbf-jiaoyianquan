@@ -16,10 +16,12 @@ import java.util.List;
  */
 public interface IBaseMenuService extends IService<BaseMenu> {
 
-    List<BaseMenu> findByPid(Integer pid);
+
+    List<BaseMenu> listadmin();
+
+    List<BaseMenu> listByName(String loginName);
 
 
-    List<BaseMenu> findByloginName(String loginName);
 
-
+    List<BaseMenu> getbycodes(Long code);
 }

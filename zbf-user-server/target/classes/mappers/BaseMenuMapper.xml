@@ -73,56 +73,75 @@
     </resultMap>
 
 
-    <select id="findByloginName" resultMap="mapVos">
-SELECT
-	m.*,DISTINCT
-	m2.id id2,
-	m2.version version2,
-	m2.code code2,
-	m2.menuName menuName2,
-	m2.imagePath imagePath2,
-	m2.url url2,
-	m2.parentCode parentCode2,
-	m2.leval leval2,
-	m2.createTime createTime2,
-	m3.id id3,
-	m3.version version3,
-	m3.code code3,
-	m3.menuName menuName3,
-	m3.imagePath imagePath3,
-	m3.url url3,
-	m3.parentCode parentCode3,
-	m3.leval leval3,
-	m3.createTime createTime3
+    <select id="listadmin" resultMap="mapVos">
+SELECT DISTINCT a.id,
+    a.code,
+	a.imagePath,
+	a.menuName,
+    a.parentCode,
+    a.leval,
+	a.url,
+    b.code code2,
+	b.id id2,
+b.imagePath imagePath2,
+	b.menuName menuName2,
+	b.parentCode parentCode2,
+	b.url url2,
+	b.leval leval2,
+	c.leval leval3,
+	c.code code3,
+	c.id id3,
+	c.imagePath imagePath3,
+	c.menuName menuName3,
+    c.parentCode parentCode3,
+	c.url url3
 FROM
-	base_menu m
-	LEFT JOIN base_menu m2 ON m2.parentCode = m.`code`
-	LEFT JOIN base_menu m3 ON m3.parentCode = m2.`code`
-WHERE
-	m.parentCode =0
-AND ( m2.id IN(
+	base_menu a
+	LEFT JOIN base_menu b ON  b.parentCode = a.`code`
+	LEFT JOIN base_menu c ON c.parentCode = b.`code`
+	WHERE a.leval = 1
 
-SELECT
-	bmr.menu_id
+    </select>
+
+
+    <select id="listByName" resultMap="mapVos">
+SELECT DISTINCT e.id,
+    e.code,
+	e.imagePath,
+	e.menuName,
+    e.parentCode,
+    e.leval,
+	e.url,
+    e2.code code2,
+    e2.parentCode parentCode2,
+    e2.leval level2,
+    e2.id id2,
+	e2.imagePath imagePath2,
+	e2.menuName menuName2,
+
+	e2.url url2,
+	 e3.code code3,
+    e3.parentCode parentCode3,
+    e3.leval level3,
+	e3.id id3,
+	e3.imagePath imagePath3,
+	e3.menuName menuName3,
+
+	e3.url url3
 FROM
-	base_user bu
-	LEFT JOIN base_user_role bur ON bu.id = bur.userId
-	left JOIN base_role_menu bmr ON bur.roleId=bmr.role_id
-
+	base_user a
+	inner JOIN base_user_role b ON a.id = b.userId
+	inner JOIN base_role c ON b.roleId = c.id
+	inner JOIN base_role_menu d ON c.id = d.role_id
+	inner JOIN base_menu e ON d.menu_id = e.id
+	inner JOIN base_menu e2 ON e2.parentCode = e.`code`
+	inner JOIN base_menu e3 ON e3.parentCode = e2.`code`
 WHERE
-	bu.id =#{value}
-)
-OR m3.id IN(
-	SELECT
-	bmr.menu_id
-FROM
-	base_user bu
-	LEFT JOIN base_user_role bur ON bu.id = bur.userId
-	left JOIN base_role_menu bmr ON bur.roleId=bmr.role_id
-
-WHERE
-	bu.id =#{value}
-))
+	a.loginName = #{loginName}
+	AND e.parentCode = 0
+	AND e.leval = 1
+	AND e2.leval = 2
+	AND e3.leval = 3
 
     </select>
 
