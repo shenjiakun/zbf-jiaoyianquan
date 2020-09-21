@@ -82,6 +82,13 @@ public class BaseMenuController {
 
     }
 
+    /**
+     * @Author 申嘉坤
+     * @Description //TODO * @param 
+     * @Date 8:28 2020/9/18
+     * @Param 
+     * @return 菜单添加根据当前时间
+     **/
     public String time(){
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date date = new Date();
@@ -90,6 +97,13 @@ public class BaseMenuController {
         return response;
     }
 
+    /**
+     * @Author 申嘉坤
+     * @Description //TODO * @param baseMenu
+     * @Date 8:29 2020/9/18
+     * @Param 
+     * @return 添加菜单
+     **/
     @RequestMapping("/addMenu")
     public boolean addMenu(@RequestBody BaseMenu baseMenu){
             try {
@@ -103,6 +117,13 @@ public class BaseMenuController {
         return false;
     }
 
+    /**
+     * @Author 申嘉坤
+     * @Description //TODO * @param baseMenu
+     * @Date 8:29 2020/9/18
+     * @Param 
+     * @return 修改菜单
+     **/
     @RequestMapping("/updMenu")
     public boolean updMenu(@RequestBody BaseMenu baseMenu){
         try {
@@ -114,6 +135,13 @@ public class BaseMenuController {
         return false;
     }
 
+    /**
+     * @Author 申嘉坤
+     * @Description //TODO * @param id
+     * @Date 8:29 2020/9/18
+     * @Param 
+     * @return 判断几级菜单分别删除
+     **/
     @RequestMapping("/delete")
    public boolean delMenu(Long id){
         try {

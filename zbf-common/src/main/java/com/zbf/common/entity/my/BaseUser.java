@@ -3,19 +3,21 @@ package com.zbf.common.entity.my;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.zbf.common.entity.enums.SexEnum;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
+import java.util.Date;
 
 /**
  * <p>
- *
+ * 
  * </p>
  *
- * @author 申嘉坤
+ * @author thyu
  * @since 2020-09-11
  */
 @Data
@@ -23,8 +25,11 @@ import java.time.LocalDateTime;
 @TableName("base_user")
 public class BaseUser implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID=1L;
 
+    /**
+     * 用户表
+     */
     /**
      * 用户表
      */
@@ -57,10 +62,14 @@ public class BaseUser implements Serializable {
     private String salt;
 
     @TableField("createTime")
-    private LocalDateTime createTime;
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private Date createTime;
 
     @TableField("updateTime")
-    private LocalDateTime updateTime;
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private Date updateTime;
 
     //性别
     @TableField("sex")
@@ -71,8 +80,22 @@ public class BaseUser implements Serializable {
     private String email;
 
     //邮箱
+    @TableField("headimg")
+    private String headimg;
+
+    //邮箱
     @TableField("status")
     private Integer status;
+
+    @TableField(exist = false)
+    private String rname;
+    @TableField(exist = false)
+    private String rids;
+
+    @TableField(exist = false)
+    private Long userId;
+    /*@TableField(exist = false)
+    private Integer[] roids;*/
 
     public BaseUser(Long id, String userName, String loginName, String passWord, String tel, SexEnum sex, String email, String salt) {
         this.id = id;
@@ -83,6 +106,8 @@ public class BaseUser implements Serializable {
         this.sex = sex;
         this.email = email;
         this.salt = salt;
+
+
     }
 
     public BaseUser(String passWord, String salt) {
@@ -90,7 +115,7 @@ public class BaseUser implements Serializable {
         this.salt = salt;
     }
 
-    public BaseUser(Long id, Integer version, String userName, String loginName, String passWord, String tel, String buMen, String salt, LocalDateTime createTime, LocalDateTime updateTime, SexEnum sex, String email) {
+    public BaseUser(Long id, Integer version, String userName, String loginName, String passWord, String tel, String buMen, String salt, Date createTime, Date updateTime, SexEnum sex, String email) {
         this.id = id;
         this.version = version;
         this.userName = userName;
@@ -103,8 +128,13 @@ public class BaseUser implements Serializable {
         this.updateTime = updateTime;
         this.sex = sex;
         this.email = email;
+
+
     }
 
     public BaseUser() {
     }
+
+
+
 }
