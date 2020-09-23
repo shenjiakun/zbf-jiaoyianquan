@@ -3,9 +3,11 @@ package com.zbf.user.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.zbf.common.entity.AllRedisKeyEnum;
 import com.zbf.common.entity.ResponseResult;
 import com.zbf.common.entity.my.BaseMenu;
+import com.zbf.common.entity.my.BaseRole;
 import com.zbf.common.entity.my.BaseUser;
 import com.zbf.common.exception.AllStatusEnum;
 import com.zbf.user.service.IBaseMenuService;
@@ -13,10 +15,7 @@ import com.zbf.user.service.IBaseUserService;
 import com.zbf.user.api.MenuService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -47,6 +46,8 @@ public class BaseMenuController {
     @Autowired
     private IBaseUserService iBaseUserService;
 
+
+
     @Autowired
     private MenuService menuService;
 
@@ -59,8 +60,10 @@ public class BaseMenuController {
      * @return 通过用户名进入菜单
      **/
     @RequestMapping("/listMenu")
-    public List<Map<String,Object>> listMenu(Integer id){
-        BaseUser byId = iBaseUserService.getById(id);
+    public List<Map<String,Object>> listMenu(String name){
+        QueryWrapper<BaseUser> userQueryWrapper = new QueryWrapper<>();
+        userQueryWrapper.eq("loginName",name);
+        BaseUser byId = iBaseUserService.getOne(userQueryWrapper);
         HashMap<String, Object> userHash = new HashMap<>();
         userHash.put("loginName",byId.getLoginName());
         userHash.put("id",byId.getId());
@@ -172,6 +175,45 @@ public class BaseMenuController {
         }
         return false;
     }
+
+
+
+    /**
+     * @Author 申嘉坤
+     * @Description //TODO * @param null
+     * @Date 14:14 2020/9/22
+     * @Param
+     * @return 通过角色id查询授权菜单
+     **/
+
+    @RequestMapping("/ByroleId")
+    public ResponseResult findByRid(@RequestParam Long roleId) {
+        ResponseResult responseResult = new ResponseResult();
+        System.out.println("获取角色id"+roleId);
+        HashMap<Object, Object> map = new HashMap<>();
+        //查询所有menu资源
+        List<BaseMenu> parentCode =  iBaseMenuService.list(new QueryWrapper<BaseMenu>().eq("parentCode",0));
+        for (BaseMenu meun:parentCode){
+            //获取二级菜单
+            List<BaseMenu> parentCode1 = iBaseMenuService.list(new QueryWrapper<BaseMenu>().eq("parentCode", meun.getCode()));
+            meun.setList(parentCode1);
+
+            //获取三级菜单
+            for (BaseMenu menu1:parentCode1){
+                List<BaseMenu> parentCode2 = iBaseMenuService.list(new QueryWrapper<BaseMenu>().eq("parentCode", menu1.getCode()));
+                menu1.setList(parentCode2);
+            }
+        }
+        map.put("menuList",parentCode);
+
+        //获取角色所有资源
+        List<BaseMenu> roleMenu = iBaseMenuService.findByRoleMenu(roleId);
+        map.put("roleMenu",roleMenu);
+        responseResult.setResult(map);
+        return responseResult;
+    }
+
+
 
 
 }

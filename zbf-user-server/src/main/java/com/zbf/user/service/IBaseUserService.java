@@ -19,4 +19,5 @@ public interface IBaseUserService extends IService<BaseUser> {
     IPage<BaseUser> selectPageVo(Page<Object> page, BaseUser vo);
 
 
+    Boolean getUserAdd(BaseUser user);
 }

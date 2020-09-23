@@ -1,6 +1,8 @@
 package com.zbf.user.controller;
 
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.uploadstarter.UploadService;
@@ -11,6 +13,7 @@ import com.zbf.common.entity.xsl.ExClass;
 import com.zbf.common.utils.AllStatusEnum;
 import com.zbf.common.utils.Md5;
 import com.zbf.common.utils.PoiUtil;
+import com.zbf.user.api.ParseExcelToJSONArrayUtil;
 import com.zbf.user.service.IBaseUserService;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
@@ -22,12 +25,8 @@ import io.minio.errors.InvalidPortException;
 import org.springframework.beans.factory.annotation.Autowired;
 
 
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.testng.annotations.ITestOrConfiguration;
 import sun.misc.BASE64Encoder;
 
 import java.io.*;
@@ -38,7 +37,6 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.text.SimpleDateFormat;
 import java.util.*;
-import java.util.stream.Stream;
 
 /**
  * <p>
@@ -120,6 +118,7 @@ public class BaseUserControllers {
         user.setStatus(0);
         user.setHeadimg(vo.getHeadimg());
         boolean save = iBaseUserService.saveOrUpdate(user);
+
         if(save){
             responseResult.setCode(AllStatusEnum.REQUEST_SUCCESS.getCode());
             responseResult.setSuccess(AllStatusEnum.REQUEST_SUCCESS.getMsg());
@@ -277,8 +276,6 @@ public class BaseUserControllers {
          * @Param
          * @return miniu上传图片
          **/
-
-
     @RequestMapping("/upload")
     public String upload(@RequestParam("file") MultipartFile file) throws IOException, InvalidPortException, InvalidEndpointException {
         String fileName = null;
@@ -404,6 +401,44 @@ public class BaseUserControllers {
             responseResult.setSuccess("导出excel失败");
             return responseResult;
         }
+
+    }
+    
+    /**
+     * @Author 申嘉坤
+     * @Description //TODO * @param null
+     * @Date 8:29 2020/9/22
+     * @Param 
+     * @return Ex导入用户数据
+     **/
+    @RequestMapping("/excelToUser")
+    @ResponseBody
+    public ResponseResult inexcl(@RequestBody MultipartFile file){
+        System.out.println("123132"+file);
+        System.out.println(file.getOriginalFilename());
+        ResponseResult responseResult=new ResponseResult();
+        //对应excel模板内容总行数
+        int excelTemplateRowNum = 2;
+        //以excel模板某行作为JSON对象键
+        int jsonRowNum = 1;
+        JSONArray array = new JSONArray();
+        try {
+            array = new ParseExcelToJSONArrayUtil().parseExcelFile(file, excelTemplateRowNum, jsonRowNum);
+            System.out.println(array);
+            List<BaseUser> list= JSON.parseArray(array.toString(), BaseUser.class);
+            System.out.println(list);
+            for (BaseUser user: list) {
+
+                Boolean userAdd = iBaseUserService.save(user);
+                if(userAdd){
+                    responseResult.setCode(0);
+                }
+            }
+
+        } catch (Exception e) {
+
+        }
+        return responseResult;
 
     }
 

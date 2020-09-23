@@ -3,6 +3,8 @@ package com.zbf.user.mapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.zbf.common.entity.my.BaseRole;
 
+import java.util.List;
+
 
 /**
  * <p>
@@ -14,4 +16,7 @@ import com.zbf.common.entity.my.BaseRole;
  */
 public interface BaseRoleMapper extends BaseMapper<BaseRole> {
 
+
+
+    List<BaseRole> selectList(BaseRole role, String name);
 }

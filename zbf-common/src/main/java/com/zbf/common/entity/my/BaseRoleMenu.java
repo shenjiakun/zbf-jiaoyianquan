@@ -1,5 +1,6 @@
 package com.zbf.common.entity.my;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -32,6 +33,7 @@ public class BaseRoleMenu implements Serializable {
      * 角色菜单表
      */
     private Long menuId;
+
 
 
 }

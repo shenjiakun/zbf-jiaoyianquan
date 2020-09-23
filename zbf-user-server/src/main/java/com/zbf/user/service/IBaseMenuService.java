@@ -24,4 +24,6 @@ public interface IBaseMenuService extends IService<BaseMenu> {
 
 
     List<BaseMenu> getbycodes(Long code);
+
+    List<BaseMenu> findByRoleMenu(Long roleId);
 }

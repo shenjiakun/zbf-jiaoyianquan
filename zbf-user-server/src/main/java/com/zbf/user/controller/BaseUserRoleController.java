@@ -20,7 +20,7 @@ import java.util.List;
  * <p>
  *  前端控制器
  * </p>
- *
+ *绑定角色中间表
  * @author thyu
  * @since 2020-09-17
  */
@@ -32,6 +32,13 @@ public class BaseUserRoleController {
     private IBaseUserRoleService iBaseUserRoleService;
 
 
+    /**
+     * @Author 申嘉坤
+     * @Description //TODO * @param baseUserRole
+     * @Date 8:00 2020/9/22
+     * @Param 
+     * @return 绑定角色的添加
+     **/
    @RequestMapping("/addRoleUser")
    public boolean bindRoleForUser(@RequestBody BaseUserRole baseUserRole){
         Integer count = 0;

@@ -38,4 +38,9 @@ public class BaseMenuServiceImpl extends ServiceImpl<BaseMenuMapper, BaseMenu> i
         return baseMapper.getbycodes(code);
     }
 
+    @Override
+    public List<BaseMenu> findByRoleMenu(Long roleId) {
+        return baseMapper.findByRoleMenu(roleId);
+    }
+
 }

@@ -4,7 +4,6 @@ import org.apache.poi.hssf.usermodel.*;
 import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.util.IOUtils;
 
-import javax.sql.DataSource;
 import java.io.*;
 import java.lang.reflect.Field;
 import java.sql.*;
@@ -13,8 +12,8 @@ import java.util.List;
 
 /**
  * @Description: TODO
- * @author: LH  XSL导出
- * @date: 2020/6/20 17:18
+ * @author: cx
+ * @date: 2020/9/19 19:18
  * @version: V1.0
  **/
 public class PoiUtil {
@@ -43,6 +42,7 @@ public class PoiUtil {
             //创建标题行
             HSSFRow row = sheet.createRow(0);
 
+
             //日期格式化
             HSSFCellStyle cellStyle = workbook.createCellStyle();
             HSSFCreationHelper creationHelper = workbook.getCreationHelper();
@@ -54,8 +54,10 @@ public class PoiUtil {
                 statement = connection.prepareStatement(sql);
                 //获取结果集
                 resultSet = statement.executeQuery();
+                System.err.println("结果集是+resulet"+resultSet);
                 //获取元数据    用来获取字段名
                 ResultSetMetaData metaData = resultSet.getMetaData();
+                System.err.println("结果集是ss+resulet"+metaData);
                 //每一行的列数
                 int columnCount = metaData.getColumnCount();
 
@@ -63,6 +65,7 @@ public class PoiUtil {
                 for (int i = 0; i < columnCount; i++) {
                     String labelName = metaData.getColumnLabel(i + 1);
                     row.createCell(i).setCellValue(labelName);
+
                 }
 
                 int i=1;
@@ -151,9 +154,11 @@ public class PoiUtil {
             System.out.println("文件读取失败");
             System.out.println(e.getMessage());
         }
+        for (int k=0;k<workbook.getNumberOfSheets();k++){
+
 
         //获取当前excel的第一个sheet表格  如果有多个sheet就自行遍历
-        HSSFSheet sheet = workbook.getSheetAt(0);
+        HSSFSheet sheet = workbook.getSheetAt(k);
 
         //获取excel表的第一行   用来获取表的字段名
         HSSFRow tempRow = sheet.getRow(0);
@@ -207,11 +212,16 @@ public class PoiUtil {
                         if (hsscell.getCellTypeEnum()== CellType.NUMERIC){
                             if(HSSFDateUtil.isCellDateFormatted(hsscell)){//日期
                                 if (field.getType()== Date.class){
+                                    java.util.Date dateCellValue = hsscell.getDateCellValue();
+
                                     field.set(tempT,hsscell.getDateCellValue());
                                 }
                             }else if(field.getType()==Integer.class){
+                                double numericCellValue = hsscell.getNumericCellValue();
+
+                                Integer ds=(int)numericCellValue;
                                 //int类型
-                                field.set(tempT,Integer.valueOf(hsscell.getStringCellValue()));
+                                field.set(tempT,ds);
                             }else if(field.getType()==Double.class){
                                 //double类型
                                 field.set(tempT,Double.parseDouble(hsscell.toString()) );
@@ -243,6 +253,7 @@ public class PoiUtil {
             //添加到list集合中
             list.add(tempT);
         }
+    }
         //将封装好的list集合返回
         return list;
     }

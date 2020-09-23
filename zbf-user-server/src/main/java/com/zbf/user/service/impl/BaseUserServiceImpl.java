@@ -25,5 +25,10 @@ public class BaseUserServiceImpl extends ServiceImpl<BaseUserMapper, BaseUser> i
         return baseMapper.selectPageVo(page,vo);
     }
 
+    @Override
+    public Boolean getUserAdd(BaseUser user) {
+        return baseMapper.getUserAdd(user);
+    }
+
 
 }

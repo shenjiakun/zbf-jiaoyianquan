@@ -5,12 +5,17 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.zbf.common.entity.my.BaseRole;
+import com.zbf.common.entity.my.BaseUser;
 import com.zbf.user.service.IBaseRoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -35,8 +40,10 @@ public class BaseRoleController {
     @Autowired
     private IBaseRoleService iBaseRoleService;
     @RequestMapping("/listAll")
-    public List<BaseRole> listAll(BaseRole role) {
-        List<BaseRole> list = iBaseRoleService.list();
+    public List<BaseRole> listAll(BaseRole role ,@RequestParam String name) {
+
+//        List<BaseRole> list = iBaseRoleService.lambdaQuery().eq(null != role.getName() && role.getName().isEmpty(),BaseRole::getName,role.getName()).list();
+        List<BaseRole> list = iBaseRoleService.selectList(role,name);
         return list;
     }
 
@@ -59,6 +66,34 @@ public class BaseRoleController {
 
         }
         return iBaseRoleService.page(page, wapper);
+    }
+
+
+    @RequestMapping("/RoleSava")
+    public boolean RoleSava(@RequestBody BaseRole baseRole){
+            try {
+//                baseRole.setId(Long.valueOf(time()));
+                iBaseRoleService.save(baseRole);
+                return true;
+            }catch (Exception ex){
+                ex.printStackTrace();
+            }
+        return false;
+    }
+
+    /**
+     * @Author 申嘉坤
+     * @Description //TODO * @param
+     * @Date 8:28 2020/9/18
+     * @Param
+     * @return 菜单添加根据当前时间
+     **/
+    public String time(){
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date date = new Date();
+        String format = simpleDateFormat.format(date);
+        String response = format.replaceAll("[[\\s-:punct:]]","");
+        return response;
     }
 
 }

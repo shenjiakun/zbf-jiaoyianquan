@@ -15,4 +15,16 @@
         id, role_code, name, miaoshu
     </sql>
 
+    <select id="selectList" resultMap="BaseResultMap">
+        SELECT a.* FROM base_role a
+        <if test="role != null">
+            <where>
+                <if test="name!=null and name!=''">
+                    and a.name like concat ('%',#{name},'%')
+                </if>
+            </where>
+
+        </if>
+    </select>
+
 </mapper>

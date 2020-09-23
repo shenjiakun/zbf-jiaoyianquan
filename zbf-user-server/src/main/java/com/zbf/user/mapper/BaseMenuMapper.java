@@ -38,4 +38,8 @@ public interface BaseMenuMapper extends BaseMapper<BaseMenu> {
 
     @Select("select * from base_menu where parentCode = ${value}")
     List<BaseMenu> getbycodes(Long code);
+
+    //h获取所有角色的资源
+    @Select("SELECT a.`name`, c.* FROM base_role a LEFT JOIN base_role_menu b on a.id=b.role_id LEFT JOIN base_menu c on c.id = b.menu_id WHERE a.id = #{roleId}")
+    List<BaseMenu> findByRoleMenu(Long roleId);
 }
