@@ -150,7 +150,6 @@ public class MyAuthentacationProvider implements AuthenticationProvider {
 
         }
 
-
     }
 
     @Override

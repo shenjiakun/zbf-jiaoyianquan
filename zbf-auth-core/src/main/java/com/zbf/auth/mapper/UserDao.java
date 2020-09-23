@@ -14,14 +14,14 @@ import java.util.Map;
 @Mapper
 public interface UserDao {
 
-    @Select("select * from base_user where loginName=#{userName}")
+    @Select("select * from base_user where loginName=#{userName} and status='1'")
     public Map<String, Object> getUserByUserName(String userName);
 
 
-    @Select("select * from base_user where tel=#{userName}")
+    @Select("select * from base_user where tel=#{userName} and status='1'")
     public Map<String, Object> getUserByPhone(String userName);
 
-    @Select("select * from base_user where email=#{userName}")
+    @Select("select * from base_user where email=#{userName} and status='1'")
     public Map<String, Object> getUserByEmail(String userName);
 
 

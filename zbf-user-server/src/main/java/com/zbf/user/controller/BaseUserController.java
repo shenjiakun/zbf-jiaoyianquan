@@ -26,6 +26,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Pattern;
@@ -213,7 +215,7 @@ public class BaseUserController {
         String s = RandomUtil.randomNumber(4);
         String encodePass= Md5.encode(baseUser.getPassWord()+s, "MD5");
         System.out.println(encodePass);
-        BaseUser user = new BaseUser(null,
+        BaseUser user = new BaseUser(baseUser.getId(),
                 baseUser.getUserName(),
                 baseUser.getLoginName(),
                 encodePass,
@@ -221,6 +223,8 @@ public class BaseUserController {
                 baseUser.getSex(),
                 baseUser.getEmail(),
                 s);
+        user.setId(Long.valueOf(time()));
+        user.setStatus(0);
         boolean save = iBaseUserService.save(user);
         if(save){
             responseResult.setCode(1006);
@@ -237,6 +241,21 @@ public class BaseUserController {
         }else{
             return null;
         }
+    }
+
+    /**
+     * @Author 申嘉坤
+     * @Description //TODO * @param
+     * @Date 8:28 2020/9/18
+     * @Param
+     * @return 用户Id根据当前时间方法添加id
+     **/
+    public String time(){
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date date = new Date();
+        String format = simpleDateFormat.format(date);
+        String response = format.replaceAll("[[\\s-:punct:]]","");
+        return response;
     }
 
 

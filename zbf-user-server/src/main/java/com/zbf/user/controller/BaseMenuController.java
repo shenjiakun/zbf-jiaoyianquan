@@ -4,6 +4,7 @@ package com.zbf.user.controller;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.sjk.utils.StringUtil;
 import com.zbf.common.entity.AllRedisKeyEnum;
 import com.zbf.common.entity.ResponseResult;
 import com.zbf.common.entity.my.BaseMenu;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.regex.Pattern;
 
 /**
  * <p>
@@ -34,10 +36,16 @@ import java.util.*;
 @RequestMapping("/menu")
 public class BaseMenuController {
 
+    public boolean isPhone(String phone){
+        return PATTERN_PHONE.matcher(phone).matches();
+    }
 
-
-    @Autowired
-    private RedisTemplate redisTemplate;
+    /**
+     * 作者: LCG
+     * 日期: 2020/9/8  12:44
+     * 描述:  校验手机号的判断
+     */
+    private static final Pattern PATTERN_PHONE = Pattern.compile("^-?\\d+(\\.\\d+)?$");
 
     @Autowired
     private IBaseMenuService iBaseMenuService;
@@ -61,6 +69,7 @@ public class BaseMenuController {
      **/
     @RequestMapping("/listMenu")
     public List<Map<String,Object>> listMenu(String name){
+
         QueryWrapper<BaseUser> userQueryWrapper = new QueryWrapper<>();
         userQueryWrapper.eq("loginName",name);
         BaseUser byId = iBaseUserService.getOne(userQueryWrapper);
@@ -69,6 +78,7 @@ public class BaseMenuController {
         userHash.put("id",byId.getId());
         List<Map<String, Object>> list = menuService.getlistMenu(userHash);
         return list;
+
     }
 
     /**
