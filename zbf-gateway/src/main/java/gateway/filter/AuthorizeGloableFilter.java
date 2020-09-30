@@ -248,6 +248,11 @@ public class AuthorizeGloableFilter implements GlobalFilter,Ordered {
             stringBuffer = new StringBuffer();
             stringBuffer.append(obj.getString("authority")).append(":").append(currentAccessUrl);
             Boolean menuRole = redisTemplate.opsForHash().hasKey("menuRole", stringBuffer.toString());
+            if (obj.getString("authority").equals("ROLE_ADMIN")){
+                //如果拥有该权限角色，更新Token,并返回新的Token
+                Mono<Void> voidMono = updateTokenForDelay(loginName, exchange, chain);
+                return voidMono;
+            }
             if(menuRole){
                 //如果拥有该权限角色，更新Token,并返回新的Token
                 Mono<Void> voidMono = updateTokenForDelay(loginName, exchange, chain);

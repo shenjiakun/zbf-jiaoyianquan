@@ -21,7 +21,7 @@ import java.util.Map;
 /**
  * 描述:
  *Excl导入
- * @author: chengshoufei
+ * @author: 申嘉坤
  * @Date: 2020/9/21 18:06
  */
 public class ParseExcelToJSONArrayUtil {

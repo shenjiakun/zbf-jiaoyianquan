@@ -40,6 +40,7 @@ public class YanZhengMa {
 
     @RequestMapping("/YanLogin")
     public boolean sendSms(@RequestParam("phone") String phone) throws ClientException {
+        System.out.println(phone);
         String code = RandomUtil.randomNumber(4);
 
         //产品名称:云通信短信API产品,开发者无需替换
@@ -48,8 +49,8 @@ public class YanZhengMa {
         String domain = "dysmsapi.aliyuncs.com";
 
         // TODO 此处需要替换成开发者自己的AK(在阿里云访问控制台寻找)
-        String accessKeyId = "LTAI4GD78RFynxWGvmNDAnNd";
-        String accessKeySecret = "tY5h4bv2xvg4XcnkEyw1i9lIVAcVnS";
+        String accessKeyId = "LTAI4G9sjMWfvs5F2gVGKLHR";
+        String accessKeySecret = "aYPEkmd6d4Vk07SjofhbkPEjNQDgF4";
 
 
         System.out.println("phone=" + phone);
@@ -58,8 +59,8 @@ public class YanZhengMa {
         redisTemplate.opsForValue().set("codes", code);
 
         //可自助调整超时时间
-        System.setProperty("sun.net.client.defaultConnectTimeout", "30000");
-        System.setProperty("sun.net.client.defaultReadTimeout", "30000");
+        System.setProperty("sun.net.client.defaultConnectTimeout", "80000");
+        System.setProperty("sun.net.client.defaultReadTimeout", "80000");
 
         //初始化acsClient,暂不支持region化
         IClientProfile profile = DefaultProfile.getProfile("cn-hangzhou", accessKeyId, accessKeySecret);
@@ -71,9 +72,9 @@ public class YanZhengMa {
         //必填:待发送手机号
         request.setPhoneNumbers(phone);
         //必填:短信签名-可在短信控制台中找到
-        request.setSignName("2546游戏小平台");
+        request.setSignName("张张果冻营业");
         //必填:短信模板-可在短信控制台中找到
-        request.setTemplateCode("SMS_202540097");
+        request.setTemplateCode("SMS_202550510");
 
 
         //可选:模板中的变量替换JSON串,如模板内容为"亲爱的${name},您的验证码为${code}"时,此处的值为
@@ -92,7 +93,7 @@ public class YanZhengMa {
             //请求成功
             System.out.println(sendSmsResponse.getCode());
             System.out.println("请求成功");
-                return true;
+            return true;
         }
         return false;
     }

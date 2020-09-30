@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wts.es.mapper.ZbfExportTaskHeaderMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.zbf.data.entity.ZbfExportTaskHeader">
+        <id column="id" property="id" />
+        <result column="version" property="version" />
+        <result column="user_id" property="userId" />
+        <result column="task_name" property="taskName" />
+        <result column="task_status" property="taskStatus" />
+        <result column="task_tail_num" property="taskTailNum" />
+        <result column="task_tail_ok_num" property="taskTailOkNum" />
+        <result column="task_sql" property="taskSql" />
+        <result column="create_time" property="createTime" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, version, user_id, task_name, task_status, task_tail_num, task_tail_ok_num, task_sql, create_time
+    </sql>
+
+</mapper>

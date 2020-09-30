@@ -14,6 +14,8 @@
         <module>zbf-user-server</module>
         <module>zbf-common</module>
         <module>zdf-aliyun-login</module>
+        <module>zbf-esjobExcel-server</module>
+        <module>zbf-esjob-server</module>
     </modules>
 
     <properties>

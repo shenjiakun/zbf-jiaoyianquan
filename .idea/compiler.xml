@@ -7,18 +7,28 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="zbf-common" />
-        <module name="zbf-user-server" />
-        <module name="zbf-gateway" />
         <module name="zbf-auth-core" />
+        <module name="zbf-esjobExcel-server" />
+        <module name="zbf-user-server" />
+        <module name="zbf-common" />
         <module name="zdf-aliyun-login" />
+        <module name="zbf-esjob-server" />
+        <module name="zbf-gateway" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="zbf-Elastic_job" target="1.8" />
+      <module name="zbf-elastic_job-server" target="1.8" />
+    </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="zbf-Elastic_job" options="-parameters" />
       <module name="zbf-auth-core" options="-parameters" />
       <module name="zbf-common" options="-parameters" />
+      <module name="zbf-elastic_job-server" options="-parameters" />
+      <module name="zbf-esjob-server" options="-parameters" />
+      <module name="zbf-esjobExcel-server" options="-parameters" />
       <module name="zbf-gateway" options="-parameters" />
       <module name="zbf-user-server" options="-parameters" />
       <module name="zdf-aliyun-login" options="-parameters" />
